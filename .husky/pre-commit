@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+
+if [ -z "$(docker compose ps -q --status running web)" ]; then
+  echo "Docker is not running or the container is down!"
+  echo "Skipping pre-commit checks. Please remember to run './bin/linter.sh' after changes to the code!"
+  exit 0 # exit with 0 so you can still commit even if your Docker is off
+else
+  echo "Container is up! Running ESLint..."
+  ./bin/lint.sh
+fi

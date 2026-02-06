@@ -1,0 +1,6 @@
+.idea
+.env
+
+# var directory for container files
+var/*
+!var/.gitkeep

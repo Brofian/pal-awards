@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* Set default  */
+@layer base {
+    :root {
+        @apply text-[rgba(255,255,255,0.87)] bg-[#242424] font-sans;
+    }
+
+    body {
+        @apply grid place-items-center min-w-60 min-h-screen relative m-0;
+        box-sizing: border-box;
+    }
+}
+
+
+/* Disable all animations if the user actively wishes to reduce them */
+@media (prefers-reduced-motion) {
+    *,
+    ::before,
+    ::after {
+        animation: none !important;
+    }
+}
