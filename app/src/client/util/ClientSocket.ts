@@ -82,8 +82,7 @@ class ClientSocket extends SimpleEventTarget<ClientSocketEvents> {
                 const eventName = packetNameToReceivedEvent(packet.type);
                 this.dispatch(eventName, packet.data);
             }
-        }
-        catch (error) {
+        } catch (error) {
             logger.error(`Failed to parse message into packet: "${_event.data}"`, error);
         }
     }

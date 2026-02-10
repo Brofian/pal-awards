@@ -8,7 +8,7 @@ import logger from "@/server/util/Logger.ts";
  * Other services like the database are NOT guaranteed to be available when the handlers are executed. These should
  * always be accessed via events.
  */
-const systemHandlers: Function[] = [
+const systemHandlers: { (): void }[] = [
     pingPongHandler,
     // Append your system handlers here
 ];

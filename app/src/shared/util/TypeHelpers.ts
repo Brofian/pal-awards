@@ -14,7 +14,6 @@ export function concatString<A extends string, B extends string>(first: A, secon
 }
 
 
-
 /**
  * Create a Type with the same keys as T, but with values of type A and an additional property "data", that
  * contains the original values of T.

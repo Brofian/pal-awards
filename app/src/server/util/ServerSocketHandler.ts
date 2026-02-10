@@ -74,8 +74,7 @@ class ServerSocketHandler extends SimpleEventTarget<ServerSocketEvents> {
 
             const message = JSON.stringify(packet);
             ws.send(message);
-        }
-        catch (error) {
+        } catch (error) {
             logger.error("Failed to send packet: ", packetName, packetData, error);
         }
     }
@@ -101,7 +100,7 @@ class ServerSocketHandler extends SimpleEventTarget<ServerSocketEvents> {
         return ws.isSubscribed(group);
     }
 
-    public getUserGroups (
+    public getUserGroups(
         ws: ServerWebSocket<SocketData>,
     ): string[] {
         return ws.subscriptions;
