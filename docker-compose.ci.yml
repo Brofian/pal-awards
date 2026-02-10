@@ -1,0 +1,5 @@
+services:
+
+  web:
+    # remove volumes in ci environment to prevent shadowing directories
+    volumes: []
