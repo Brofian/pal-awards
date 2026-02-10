@@ -20,8 +20,11 @@ jobs:
       - name: Start containers
         run: docker compose up -d
 
+      - name: Install dependencies
+        run: docker compose exec -T web bun install
+
       - name: TypeScript check
-        run: docker compose exec -T web bun run build
+        run: docker compose exec -T web bunx tsc --noEmit
 
       - name: ESLint
         run: docker compose exec -T web bunx eslint .

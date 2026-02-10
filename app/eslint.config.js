@@ -6,6 +6,10 @@ export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
     {
+        // do not apply any rules to the generated dist directory
+        ignores: ["dist/**/*"]
+    },
+    {
         // Apply this rule ONLY to files in the server directory: prevent importing from the client directory
         files: ["src/server/**/*.ts"],
         rules: {
