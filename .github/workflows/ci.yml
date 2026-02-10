@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Prepare environment
+        run: cp .env.sample .env
+
       - name: Build containers
         run: docker compose build
 
