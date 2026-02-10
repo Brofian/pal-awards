@@ -1,12 +1,26 @@
 import SimpleEventTarget from "@/shared/events/SimpleEventTarget.ts";
-import type {ServerToClientPacket} from "@/shared/socket/packets/ServerToClientPackets.ts";
-import type {ClientToServerEventName, ClientToServerPackets} from "@/shared/socket/packets/ClientToServerPackets.ts";
+import type {
+    ServerToClientPacket,
+    ServerToClientPacketName,
+    ServerToClientPackets
+} from "@/shared/socket/packets/ServerToClientPackets.ts";
+import type {
+    ClientToServerPacket,
+    ClientToServerPacketName,
+    ClientToServerPackets
+} from "@/shared/socket/packets/ClientToServerPackets.ts";
 import logger from "@/client/util/Logger.ts";
-import type {PrefixKeys} from "@/shared/util/TypeHelpers.ts";
+import {concatString, type PrefixKeys} from "@/shared/util/TypeHelpers.ts";
+
+
+export function packetNameToReceivedEvent(packetName: ServerToClientPacketName) {
+    return concatString('received-', packetName);
+}
+
 
 export type ClientSocketEvents = {
     "connection-changed": { isOpen: boolean, isError: boolean },
-} & PrefixKeys<"received-", ServerToClientPacket>;
+} & PrefixKeys<"received-", ServerToClientPackets>;
 
 /**
  *  The singleton class for creating and handling the websocket connection on the client side
@@ -37,12 +51,13 @@ class ClientSocket extends SimpleEventTarget<ClientSocketEvents> {
         return this.connection.readyState === this.connection.OPEN;
     }
 
-    public sendPacket<K extends ClientToServerEventName>(type: K, data: ClientToServerPackets[K]): void {
+    public sendPacket<K extends ClientToServerPacketName>(packetName: K, packetData: ClientToServerPackets[K]): void {
         if (!this.isConnected()) {
-            logger.error(`Tried to send packet "${type}" without established connection`);
+            logger.error(`Tried to send packet "${packetName}" without established connection`);
             return;
         }
-        this.connection.send(JSON.stringify(data));
+        const packet: ClientToServerPacket = {type: packetName, data: packetData};
+        this.connection.send(JSON.stringify(packet));
     }
 
     private onConnectionOpen(_event: Event): void {
@@ -60,13 +75,16 @@ class ClientSocket extends SimpleEventTarget<ClientSocketEvents> {
         this.dispatch('connection-changed', {isOpen: false, isError: true});
     }
 
-    private onConnectionMessage(_event: MessageEvent<ServerToClientPacket>): void {
-        logger.debug("Connection message: ", _event.data);
-        if (_event.data) {
-            // we know that "received-" + (keyof ServerToClientPacket) is the correct type. But TypeScript
-            // does not infer from string concatenations. So we have to convince it!
-            const packetEvent = `received-${_event.data.type}` as `received-${keyof ServerToClientPacket}`;
-            this.dispatch(packetEvent, _event.data.data);
+    private onConnectionMessage(_event: MessageEvent<string>): void {
+        try {
+            if (_event.data) {
+                const packet = JSON.parse(_event.data) as ServerToClientPacket;
+                const eventName = packetNameToReceivedEvent(packet.type);
+                this.dispatch(eventName, packet.data);
+            }
+        }
+        catch (error) {
+            logger.error(`Failed to parse message into packet: "${_event.data}"`, error);
         }
     }
 }

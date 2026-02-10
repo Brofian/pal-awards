@@ -4,6 +4,7 @@ import serverController from "@/server/Controller.ts";
 import type {SocketData} from "@/server/util/ServerSocketHandler.ts";
 import migrateDatabase from "@/server/database/Migrate.ts";
 import logger from "@/server/util/Logger.ts";
+import executeSystemHandlers from "@/server/SystemRegistry.ts";
 
 const HTTP_PORT = Bun.env.HTTP_PORT || 3000;
 
@@ -57,5 +58,6 @@ const server = serve<SocketData>({
 });
 
 await migrateDatabase();
+await executeSystemHandlers();
 
 logger.info(`Server running at ${server.url}`);

@@ -6,6 +6,32 @@ import type {CustomEventInit} from "bun";
 export default function useEvent<
     T extends SimpleEventsList,
     E extends keyof T
+>(  // Additional overload to add the possible undefined return type if a default is omitted. This comment cannot be a JSDoc
+    eventTarget: SimpleEventTarget<T>,
+    event: E,
+    defaultValue?: undefined
+): T[E] | undefined;
+
+export default function useEvent<
+    T extends SimpleEventsList,
+    E extends keyof T
+>(  // Additional overload to the useEvent hook that ensures the return type if a default is set. This comment cannot be a JSDoc
+    eventTarget: SimpleEventTarget<T>,
+    event: E,
+    defaultValue: T[E]
+): T[E];
+
+/**
+ * Subscribe to an event on the provided EventTarget, then get updated automatically with the last
+ * data this event was dispatched with
+ *
+ * @param eventTarget       The instance on which the event is expected to be dispatched.
+ * @param event             The event to listen to.
+ * @param defaultValue      An optional default value until the event is dispatched the first time.
+ */
+export default function useEvent<
+    T extends SimpleEventsList,
+    E extends keyof T
 >(
     eventTarget: SimpleEventTarget<T>,
     event: E,
@@ -15,7 +41,9 @@ export default function useEvent<
 
     useEffect(() => {
         const handler = (evt: CustomEventInit<T[E]>): void => {
-            setValue(evt.detail);
+            if (evt.detail) {
+                setValue(evt.detail);
+            }
         };
         // subscribe to the event
         eventTarget.on(event, handler);

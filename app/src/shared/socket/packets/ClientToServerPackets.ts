@@ -1,12 +1,12 @@
 export type ClientToServerPackets = {
-    "ping": { num: 42 }
+    "ping": { num: number }
 }
 
-export type ClientToServerEventName = keyof ClientToServerPackets;
+export type ClientToServerPacketName = keyof ClientToServerPackets;
 
-export type ClientToServerPacketSignature<K extends ClientToServerEventName> = {
+export type ClientToServerPacketSignature<K extends ClientToServerPacketName> = {
     type: K;
     data: ClientToServerPackets[K];
 }
 
-export type ClientToServerPacket = ClientToServerPacketSignature<ClientToServerEventName>;
+export type ClientToServerPacket = ClientToServerPacketSignature<ClientToServerPacketName>;
