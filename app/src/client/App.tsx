@@ -5,6 +5,8 @@ import useSocketConnection from "@/client/hooks/useSocketConnection.ts";
 export function App() {
     const isConnected = useSocketConnection();
 
+    // a dummy commit
+
     // TODO: Implement routing on this level
     return (
         <Home isConnected={isConnected}></Home>
