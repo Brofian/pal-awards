@@ -6,6 +6,7 @@ export function App() {
     const isConnected = useSocketConnection();
 
     // a dummy commit
+    // another dummy commit
 
     // TODO: Implement routing on this level
     return (
