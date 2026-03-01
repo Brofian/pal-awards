@@ -34,7 +34,6 @@ class ClientSocket extends SimpleEventTarget<ClientSocketEvents> {
 
     public constructor() {
         super();
-
         // use the current location to determine the url for the websocket (by just replacing the path)
         const {protocol, hostname, port} = window.location;
         const websocketUrl = `${protocol}//${hostname}${port ? `:${port}` : ""}/ws`;

@@ -4,6 +4,7 @@ import QueueWorker from "@/shared/util/QueueWorker.ts";
 
 const mailerConfig = {
     smptHost: Bun.env.MAILER_SMTP || '',
+    port: Bun.env.MAILER_SMTP_PORT ? parseInt(Bun.env.MAILER_SMTP_PORT) : 465,
     user: Bun.env.MAILER_USER || '',
     password: Bun.env.MAILER_PASS || '',
     senderName: Bun.env.MAILER_SENDER_NAME || '',
@@ -31,8 +32,8 @@ class Mailer {
             // create mailing service
             this.mailTransporter = createTransport({
                 host: mailerConfig.smptHost,
-                port: 465,
-                secure: true,
+                port: mailerConfig.port,
+                secure: mailerConfig.smptHost !== "mailhog",
                 auth: {
                     user: mailerConfig.user,
                     pass: mailerConfig.password
@@ -70,6 +71,7 @@ class Mailer {
         const mailPromises: Promise<void>[] = [];
 
         for (const mail of mails) {
+            Logger.debug(`Sending mail: ${mail.subject}`);
             const mailPromise = this.mailTransporter.sendMail({
                 from: `"${mailerConfig.senderName}" ${mailerConfig.senderAddress}`,
                 to: mail.receiver,

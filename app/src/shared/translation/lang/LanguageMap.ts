@@ -10,9 +10,30 @@ export type AvailableLanguageKey = keyof typeof languageMap;
 export type TranslationSchema = {
     "title": string,
     "404": string,
+    "generic_error": string,
     "debug": {
         "websocket": string,
         "connected": string,
         "disconnected": string,
+    },
+    "auth": {
+        "registration": {
+            "error": {
+                "username_unavailable": string,
+                "email_unavailable": string,
+            },
+        },
+        "login": {
+            "error": {
+                "failed": string,
+            }
+        }
+    },
+    "mail": {
+        "verification": {
+            "subject": string,
+            "contentPlain": string,
+            "contentHTML": string,
+        }
     }
 }

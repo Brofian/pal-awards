@@ -4,6 +4,7 @@ import type {ClientToServerPacketName, ClientToServerPackets} from "@/shared/soc
 import type {ServerToClientPacketName, ServerToClientPackets} from "@/shared/socket/packets/ServerToClientPackets.ts";
 import clientSocket, {packetNameToReceivedEvent} from "@/client/util/ClientSocket.ts";
 import useSocketConnection from "@/client/hooks/useSocketConnection.ts";
+import type {SimpleEventListener} from "@/shared/events/SimpleEventTarget.ts";
 
 /**
  * A function for validating a response before updating the last received value of the useSocketFetch hook
@@ -79,7 +80,10 @@ export default function useSocketFetch<
      */
     useEffect(() => {
         let responseIndex = 0;
-        const handler = (evt: CustomEventInit<ServerToClientPackets[RES]>): void => {
+
+        const event = packetNameToReceivedEvent(responsePacket);
+
+        const handler = ((evt: CustomEventInit<ServerToClientPackets[RES]>): void => {
             const responseData = evt.detail;
 
             // only update the value if the matching function approves the new data
@@ -87,8 +91,7 @@ export default function useSocketFetch<
                 setValue(responseData);
             }
             responseIndex++;
-        };
-        const event = packetNameToReceivedEvent(responsePacket);
+        }) as SimpleEventListener<ServerToClientPackets[ServerToClientPacketName]>;
 
         // subscribe to the response event
         clientSocket.on(event, handler);

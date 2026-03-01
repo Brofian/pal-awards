@@ -11,7 +11,7 @@ type TranslationPaths<T> = {
 }[keyof T];
 
 // The actually available keys for the translation schema
-type TranslationKey = TranslationPaths<TranslationSchema>;
+export type TranslationKey = TranslationPaths<TranslationSchema>;
 
 
 /**

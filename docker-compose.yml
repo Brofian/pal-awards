@@ -18,3 +18,10 @@ services:
              fi"
     ports:
       - "${HTTP_PORT}:3000"
+
+  mailhog:
+    image: mailhog/mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"

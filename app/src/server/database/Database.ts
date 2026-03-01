@@ -32,9 +32,7 @@ export class Database extends SimpleEventTarget<DatabaseEvents> {
      * @param parameters
      * @param parameterTypes
      */
-    public async query<T extends Array<DuckDBValue>, P extends QueryParameters = {
-        _: never
-    }>(sql: string, parameters?: P, parameterTypes?: QueryParameterTypes<P>): Promise<QueryResult<T>> {
+    public async query<T extends Array<DuckDBValue>, P extends QueryParameters = {}>(sql: string, parameters?: P, parameterTypes?: QueryParameterTypes<P>): Promise<QueryResult<T>> {
         let result;
         if (parameters) {
             // run a prepared query and bind the parameters to $1, $2, etc.

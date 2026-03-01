@@ -1,5 +1,7 @@
 export type ClientToServerPackets = {
-    "ping": { num: number }
+    "ping": { num: number },
+    "login": { usernameOrEmail: string, password: string },
+    "register": { email: string, username: string, password: string },
 }
 
 export type ClientToServerPacketName = keyof ClientToServerPackets;

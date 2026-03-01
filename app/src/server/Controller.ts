@@ -10,17 +10,18 @@ class ServerController {
 
     public open(ws: ServerWebSocket<SocketData>): void {
         // initialize socket data
-        ws.data.uuid = Bun.randomUUIDv7();
-        logger.debug(`Connection open: ${ws.data.uuid}`);
+        ws.data.connectionUUID = Bun.randomUUIDv7();
+        logger.debug(`Connection open: ${ws.data.connectionUUID}`);
+        serverSocketHandler.onConnection(ws);
     }
 
     public message(ws: ServerWebSocket<SocketData>, message: string | Buffer<ArrayBuffer>): void {
-        logger.debug(`Connection message: ${ws.data.uuid} : ${message}`);
+        logger.debug(`Connection message: ${ws.data.connectionUUID} : ${message}`);
         serverSocketHandler.onMessageReceived(ws, String(message))
     }
 
     public close(ws: ServerWebSocket<SocketData>, code: number, reason: string): void {
-        logger.debug(`Connection closed: ${ws.data.uuid} (code: ${code}, reason: ${reason || '-'})`);
+        logger.debug(`Connection closed: ${ws.data.connectionUUID} (code: ${code}, reason: ${reason || '-'})`);
     }
 
 }

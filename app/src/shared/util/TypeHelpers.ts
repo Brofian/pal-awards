@@ -19,8 +19,8 @@ export function concatString<A extends string, B extends string>(first: A, secon
  * contains the original values of T.
  */
 type WrapValues<T, A> = {
-    [K in keyof T]: A & {
-    data: T[K];
-};
+    [K in keyof T]: {
+        data: T[K];
+    } & A;
 };
 export {type WrapValues};

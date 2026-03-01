@@ -3,3 +3,6 @@ services:
   web:
     # remove volumes in ci environment to prevent shadowing directories
     volumes: !reset []
+
+  # remove mailhog in ci environment
+  mailhog: !reset {}

@@ -21,17 +21,21 @@ const server = serve<SocketData>({
     // HTTP Fetch Handler
     async fetch(req, server) {
         const url = new URL(req.url);
+        const cookies = new Bun.CookieMap(req.headers.get("cookie") || undefined);
 
         // Handle WebSocket Upgrades (HTTP -> WS)
         if (url.pathname === "/ws") {
             const upgraded = server.upgrade(req, {
                 data: {
-                    uuid: undefined
+                    requestCookies: cookies,
+                    connectionUUID: undefined,
+                    authenticationData: {
+                        authenticated: false
+                    }
                 } as SocketData
             });
             if (upgraded) return undefined; // Bun takes over the connection
         }
-
         // Let the routes handle all other requests
         return undefined;
     },

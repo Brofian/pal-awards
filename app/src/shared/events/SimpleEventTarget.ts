@@ -1,6 +1,6 @@
 import type {CustomEventInit} from "bun";
 
-type SimpleEventListener<D> = { (event: CustomEventInit<D>): void };
+export type SimpleEventListener<D> = { (event: CustomEventInit<D>): void };
 
 export type SimpleEventsList = { [key: string]: unknown };
 

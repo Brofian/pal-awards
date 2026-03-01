@@ -1,5 +1,6 @@
 import {pingPongHandler} from "@/server/system/PingPong.ts";
 import logger from "@/server/util/Logger.ts";
+import {userAuthenticationHandler} from "@/server/system/UserAuthentication.ts";
 
 /**
  * This is the list of all system handlers. They will be called once on system startup and can register
@@ -9,6 +10,7 @@ import logger from "@/server/util/Logger.ts";
  * always be accessed via events.
  */
 const systemHandlers: { (): void }[] = [
+    userAuthenticationHandler,
     pingPongHandler,
     // Append your system handlers here
 ];
