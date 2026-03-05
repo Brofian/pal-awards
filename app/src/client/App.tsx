@@ -5,17 +5,19 @@ import useEvent from "@/client/hooks/useEvent.ts";
 import clientDataContainer from "@/client/util/ClientDataContainer.ts";
 import Auth from "@/client/pages/auth/Auth.tsx";
 import "./styles/styles.ts";
+import Load from "@/client/pages/load/Load.tsx";
 
 export function App() {
     const isConnected = useSocketConnection();
-    const auth = useEvent(clientDataContainer, 'authChanged', {
-        isAuthenticated: false,
-        isVerified: false,
-        currentUsername: undefined,
-    });
+    const auth = useEvent(clientDataContainer, 'authChanged');
 
-    // TODO: Implement routing on this level
+    // show the loading screen, until authentication is ready
+    if (undefined === auth) {
+        return <Load />
+    }
+
     return auth.isAuthenticated ? (
+        // TODO: Implement routing on this level
         <Home isConnected={isConnected}></Home>
     ) : (
         <Auth />
