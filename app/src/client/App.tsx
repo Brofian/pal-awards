@@ -3,8 +3,8 @@ import Home from "@/client/pages/home/Home.tsx";
 import useSocketConnection from "@/client/hooks/useSocketConnection.ts";
 import useEvent from "@/client/hooks/useEvent.ts";
 import clientDataContainer from "@/client/util/ClientDataContainer.ts";
-import Register from "@/client/pages/auth/Register.tsx";
-import Login from "@/client/pages/auth/Login.tsx";
+import Auth from "@/client/pages/auth/Auth.tsx";
+import "./styles/styles.ts";
 
 export function App() {
     const isConnected = useSocketConnection();
@@ -18,7 +18,7 @@ export function App() {
     return auth.isAuthenticated ? (
         <Home isConnected={isConnected}></Home>
     ) : (
-        <Register />
+        <Auth />
     );
 }
 

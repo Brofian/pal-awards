@@ -9,7 +9,8 @@ export default function useEvent<
 >(  // Additional overload to add the possible undefined return type if a default is omitted. This comment cannot be a JSDoc
     eventTarget: SimpleEventTarget<T>,
     event: E,
-    defaultValue?: undefined
+    defaultValue?: undefined,
+    callback?: {(value: T[E]): void}
 ): T[E] | undefined;
 
 export default function useEvent<
@@ -18,7 +19,8 @@ export default function useEvent<
 >(  // Additional overload to the useEvent hook that ensures the return type if a default is set. This comment cannot be a JSDoc
     eventTarget: SimpleEventTarget<T>,
     event: E,
-    defaultValue: T[E]
+    defaultValue: T[E],
+    callback?: {(value: T[E]): void}
 ): T[E];
 
 /**
@@ -28,6 +30,7 @@ export default function useEvent<
  * @param eventTarget       The instance on which the event is expected to be dispatched.
  * @param event             The event to listen to.
  * @param defaultValue      An optional default value until the event is dispatched the first time.
+ * @param callback          An optional callback that is executed when the event is triggered, before the value is updated
  */
 export default function useEvent<
     T extends SimpleEventsList,
@@ -35,13 +38,18 @@ export default function useEvent<
 >(
     eventTarget: SimpleEventTarget<T>,
     event: E,
-    defaultValue?: T[E]
+    defaultValue?: T[E],
+    callback?: {(value: T[E]): void}
 ): T[E] | undefined {
     const [value, setValue] = useState<T[E] | undefined>(defaultValue);
 
     useEffect(() => {
         const handler = (evt: CustomEventInit<T[E]>): void => {
             if (evt.detail) {
+                if (callback) {
+                    callback(evt.detail);
+                }
+
                 setValue(evt.detail);
             }
         };

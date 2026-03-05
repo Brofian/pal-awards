@@ -4,12 +4,6 @@ import {
     type TABLE_USERS_SCHEMA
 } from "@/server/database/Tables.ts";
 import type {TranslationKey} from "@/shared/translation/Translation.ts";
-import {
-    DuckDBBooleanType,
-    DuckDBIntegerType,
-    DuckDBStringLiteralType,
-    DuckDBVarCharType
-} from "@duckdb/node-api/lib/DuckDBType";
 
 export type AuthenticationResult = {
     authenticated: false,

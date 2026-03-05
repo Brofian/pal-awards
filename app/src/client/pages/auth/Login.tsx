@@ -1,20 +1,35 @@
 import useEvent from "@/client/hooks/useEvent.ts";
-import clientDataContainer from "@/client/util/ClientDataContainer.ts";
-import {useState, type MouseEvent} from "react";
+import {type MouseEvent, useCallback, useState} from "react";
 import clientSocket from "@/client/util/ClientSocket.ts";
-import {translate} from "@/shared/translation/Translation.ts";
+import {translate, type TranslationKey} from "@/shared/translation/Translation.ts";
 
 interface IProps {
 }
 
 export default function Login(props: IProps) {
-    const auth = useEvent(clientDataContainer, 'authChanged');
-    const loginResponse = useEvent(clientSocket, 'received-loginResponse');
-
     const [usernameField, setUsernameField] = useState<string>('');
     const [passwordField, setPasswordField] = useState<string>('');
+    const [isLoading, setLoading] = useState<boolean>(false);
+
+    const loginResponse = useEvent(clientSocket, 'received-loginResponse', undefined,
+        () => setLoading(false));
+
+
+    const triggerErrorResponse = useCallback((error: TranslationKey) => {
+        clientSocket.dispatch('received-loginResponse', {success: false, error });
+    }, []);
 
     const onSubmit = (e: MouseEvent<HTMLButtonElement>) => {
+        if (usernameField.length === 0) {
+            triggerErrorResponse('auth.login.error.username_empty');
+            return
+        }
+        if (passwordField.length === 0) {
+            triggerErrorResponse('auth.login.error.password_empty');
+            return
+        }
+
+        setLoading(true);
         clientSocket.sendPacket('login', {
             password: passwordField,
             usernameOrEmail: usernameField
@@ -23,36 +38,44 @@ export default function Login(props: IProps) {
     };
 
     return (
-        <div className="max-w-7xl mx-auto p-8 text-center relative z-10">
-            <h1 className="text-5xl font-bold my-4 leading-tight">Login</h1>
-            <p>
-                Status: {(auth === undefined) ? 'not changed' : auth.currentUsername}
-            </p>
-            <div>
-                {loginResponse && !loginResponse.success && loginResponse.error &&
-                    <div className={"text-red-500"}>
-                        {translate(loginResponse.error)}
-                    </div>
-                }
+        <>
+            {loginResponse && !loginResponse.success && loginResponse.error &&
+                <div className={"text-red-500 mb-4"}>
+                    {translate(loginResponse.error)}
+                </div>
+            }
 
-                <form>
-                    <label>
-                        <input className={"bg-neutral-700"}
-                               placeholder={"Username"}
-                               value={usernameField}
-                               onChange={e => setUsernameField(e.target.value)} />
+            <form className={"flex flex-col gap-4"}>
+                <div className={"flex flex-col"}>
+                    <label htmlFor={"authLoginUsername"}>
+                        {translate("auth.login.fields.username_label")}
                     </label>
-                    <br />
-                    <label>
-                        <input className={"bg-neutral-700"}
-                               placeholder={"Passwort"}
-                               value={passwordField}
-                               onChange={e => setPasswordField(e.target.value)} />
+                    <input id={"authLoginUsername"}
+                           placeholder={translate("auth.login.fields.username_placeholder")}
+                           value={usernameField}
+                           disabled={isLoading}
+                           type={"text"}
+                           onChange={e => setUsernameField(e.target.value)}/>
+                </div>
+
+                <div className={"flex flex-col"}>
+                    <label htmlFor={"authLoginPassword"}>
+                        {translate("auth.login.fields.password_label")}
                     </label>
-                    <br />
-                    <button type={"submit"} onClick={onSubmit}>Login</button>
-                </form>
-            </div>
-        </div>
+                    <input id={"authLoginPassword"}
+                           placeholder={translate("auth.login.fields.password_placeholder")}
+                           value={passwordField}
+                           disabled={isLoading}
+                           type={"password"}
+                           onChange={e => setPasswordField(e.target.value)}/>
+                </div>
+
+                <button type={"submit"}
+                        className={"primary-btn mt-4"}
+                        onClick={onSubmit}
+                        disabled={isLoading}
+                >{translate("auth.login.fields.submit_text")}</button>
+            </form>
+        </>
     );
 }

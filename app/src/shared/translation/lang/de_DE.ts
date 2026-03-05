@@ -11,14 +11,40 @@ const Translation: TranslationSchema = {
     },
     "auth": {
         "registration": {
+            "title": "Registrieren",
+            "login_instead": "Oder logge dich hier ein!",
             "error": {
                 "username_unavailable": "Dieser Benutzername wird bereits verwendet",
                 "email_unavailable": "Diese E-Mail Adresse wird bereits verwendet",
+                "email_empty": "Bitte gib eine E-Mail Adresse an",
+                "username_empty": "Bitte gib einen Benutzernamen an",
+                "password_empty": "Bitte gib ein Passwort an",
+                "password_malformed": "Das Passwort muss mindestens 3 Zeichen lang sein"
+            },
+            "fields": {
+                "username_label": "Benutzername",
+                "username_placeholder": "User1234",
+                "email_label": "E-Mail",
+                "email_placeholder": "example@mail.de",
+                "password_label": "Passwort",
+                "password_placeholder": "********",
+                "submit_text": "Registrieren",
             }
         },
         "login": {
+            "title": "Einloggen",
+            "register_instead": "Oder registriere dich hier neu!",
             "error": {
                 "failed": "Passwort oder Benutzername falsch",
+                "password_empty": "Bitte gib ein Passwort an",
+                "username_empty": "Bitte gib einen Benutzernamen an",
+            },
+            "fields": {
+                "username_label": "Benutzername",
+                "username_placeholder": "User1234",
+                "password_label": "Passwort",
+                "password_placeholder": "********",
+                "submit_text": "Login",
             }
         }
     },

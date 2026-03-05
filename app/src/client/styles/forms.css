@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+input,
+input[type=text],
+input[type=password],
+input[type=email] {
+    @apply border-2 border-neutral-700 rounded-xl;
+    @apply pl-4 pr-4 pt-1 pb-1;
+    @apply placeholder:text-neutral-600;
+}
+
+label {
+    text-align: left;
+    @apply text-sm;
+}

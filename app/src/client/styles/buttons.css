@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+button {
+    @apply bg-neutral-700;
+}
+
+button.primary-btn {
+    @apply bg-cyan-400 text-neutral-900 rounded-lg pl-4 pr-4 pt-1 pb-1;
+}

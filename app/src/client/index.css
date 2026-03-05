@@ -7,7 +7,7 @@
     }
 
     body {
-        @apply grid place-items-center min-w-60 min-h-screen relative m-0;
+        @apply min-w-60 min-h-screen relative;
         box-sizing: border-box;
     }
 }

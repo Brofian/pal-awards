@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+a {
+    cursor: pointer;
+    @apply text-cyan-400;
+}
